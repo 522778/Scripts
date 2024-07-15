@@ -1,4 +1,3 @@
-﻿using System;
 using System.Text;
 
 // To build in single file
@@ -64,10 +63,38 @@ String getGenre()
 
 String getDate()
 {
-    String[] dateAlbum = fullPath.Split('\\');
-    String date = dateAlbum[dateAlbum.Length - 1].Split('-')[0].Trim();
+    String[] folders = fullPath.Split('\\');
+    String folderDateTitle = folders[folders.Length - 1];
+    String date;
+
+    if (folderDateTitle.Contains("-"))
+    {
+        date = folderDateTitle.Split('-')[0].Trim();
+    }
+    else
+    {
+        date = "";
+    }
 
     return date;
+}
+
+String getTitle()
+{
+    String[] folders = fullPath.Split('\\');
+    String folderDateTitle = folders[folders.Length - 1];
+    String title;
+
+    if (folderDateTitle.Contains("-"))
+    {
+        title = folderDateTitle.Split('-')[1].Trim();
+    }
+    else
+    {
+        title = folderDateTitle.Trim();
+    }
+
+    return title;
 }
 
 String getPerformer()
@@ -78,15 +105,9 @@ String getPerformer()
     return performer;
 }
 
-String getTitle()
+
+String getTracks()
 {
-    String[] dateAlbum = fullPath.Split('\\');
-    String title = dateAlbum[dateAlbum.Length - 1].Split('-')[1].Trim();
-
-    return title;
-}
-
-String getTracks() {
 
     StringBuilder tracks = new StringBuilder();
 
@@ -169,10 +190,10 @@ String getMostUsedExtension()
     String mostUsedExtension = ".flac";
 
     String[] files = Directory.GetFiles(fullPath);
-    List<String> allExtensions = new List<String> ();
+    List<String> allExtensions = new List<String>();
 
     // get all extensions
-    foreach(String file in files)
+    foreach (String file in files)
     {
         allExtensions.Add(Path.GetExtension(file));
     }
@@ -188,7 +209,7 @@ String getMostUsedExtension()
     {
         currentCount = 0;
 
-        foreach(String extension in allExtensions)
+        foreach (String extension in allExtensions)
         {
             if (extension.Equals(uniqueExtensions[i]))
             {
