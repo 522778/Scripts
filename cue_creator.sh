@@ -9,6 +9,9 @@ echo "and this script is inside the folder with the tracks"
 
 # set variables
 
+echo "Enter the genre:"
+read GENRE
+GENRE="${GENRE^}"
 FULL_PATH=$(find "$PWD" | head -1)
 COUNT_SUBDIR=$(echo $FULL_PATH | grep -o "/" | wc -l)
 CURRENT_DIR=$(echo $FULL_PATH | cut -d "/" -f $((COUNT_SUBDIR + 1)))
@@ -16,15 +19,12 @@ PARENT_DIR=$(echo $FULL_PATH | cut -d "/" -f $COUNT_SUBDIR)
 PERFORMER=$PARENT_DIR
 TITLE=$(echo $CURRENT_DIR | cut -d " " -f 3-)
 DATE=$(echo $CURRENT_DIR | cut -d " " -f 1)
-echo "Enter the genre:"
-read GENRE
-GENRE="${GENRE^}"
 
 # check is .cue file already exists
 
 echo "Check existing .CUE files"
 
-if [ $(ls *.cue 2>/dev/null | wc -l) -gt 0 ]; then
+if [[ $(ls *.cue 2>/dev/null | wc -l) -gt 0 ]]; then
 	echo "Listed files will be deleted:"
 	ls *.cue -1
 	ls *.cue | xargs -d '\n' rm
