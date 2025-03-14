@@ -10,12 +10,12 @@ echo "and this script is inside the folder with the tracks"
 # set variables
 
 FULL_PATH=$(find "$PWD" | head -1)
-PARENT_DIR=${FULL_PATH##*/}
-GRAND_PARENT_DIR=${FULL_PATH%/*}
-GRAND_PARENT_DIR=${GRAND_PARENT_DIR##*/}
-PERFORMER=$GRAND_PARENT_DIR
-TITLE=${PARENT_DIR:7}
-DATE=${PARENT_DIR::4}
+COUNT_SUBDIR=$(echo $FULL_PATH | grep -o "/" | wc -l)
+CURRENT_DIR=$(echo $FULL_PATH | cut -d "/" -f $((COUNT_SUBDIR + 1)))
+PARENT_DIR=$(echo $FULL_PATH | cut -d "/" -f $COUNT_SUBDIR)
+PERFORMER=$PARENT_DIR
+TITLE=$(echo $CURRENT_DIR | cut -d " " -f 3-)
+DATE=$(echo $CURRENT_DIR | cut -d " " -f 1)
 echo "Enter the genre:"
 read GENRE
 GENRE="${GENRE^}"
