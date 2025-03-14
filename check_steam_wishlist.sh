@@ -43,11 +43,10 @@ getAppUrl() {
 APP_IDS=$(getAppIdsFromWishlist)
 APP_ID_DISCOUNT_LIST=$(getAppIdDiscount "$APP_IDS")
 
-
 for APP_ID_DISCOUNT in $APP_ID_DISCOUNT_LIST; do
 	if [[ "$APP_ID_DISCOUNT" =~ "_" ]]; then
-		APP_ID=$(echo $APP_ID_DISCOUNT | cut -d "_" -f 1)
-		DISCOUNT=$(echo $APP_ID_DISCOUNT | cut -d "_" -f 2)
+		APP_ID=${APP_ID_DISCOUNT%_*}
+		DISCOUNT=${APP_ID_DISCOUNT#*_}
 		if [[ "$DISCOUNT" -ge "$DISCOUNT_EXPECTED" ]]; then
 			APP_URL=$(getAppUrl "$APP_ID")
 			echo "$APP_URL"
