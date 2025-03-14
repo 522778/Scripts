@@ -18,14 +18,14 @@ fi
 
 # functions
 
-getWishlistAppIds() {
+getAppIdsFromWishlist() {
 	local API="https://api.steampowered.com/IWishlistService/GetWishlist/v1/?steamid="
 	local REQUEST="${API}${PROFILE_ID}"
 	local RESULT=$(curl -sl ${REQUEST} | grep -oP '"appid":\s*\K\d+' | paste -sd,)
 	echo "$RESULT"
 }
 
-getDiscountAppIds() {
+getAppIdDiscount() {
 	local APP_ID_LIST=$1
 	local API="https://store.steampowered.com/api/appdetails?appids="
 	local REQUEST="${API}${APP_ID_LIST}&filters=price_overview"
@@ -40,13 +40,14 @@ getAppUrl() {
 
 # main
 
-WISHLIST_APP_IDS=$(getWishlistAppIds)
-DISCOUNT_APP_IDS=$(getDiscountAppIds "$WISHLIST_APP_IDS")
+APP_IDS=$(getAppIdsFromWishlist)
+APP_ID_DISCOUNT_LIST=$(getAppIdDiscount "$APP_IDS")
 
-for APP_ID_DISCOUNT in $DISCOUNT_APP_IDS; do
+
+for APP_ID_DISCOUNT in $APP_ID_DISCOUNT_LIST; do
 	if [[ "$APP_ID_DISCOUNT" =~ "_" ]]; then
-		APP_ID="${APP_ID_DISCOUNT%%_*}"
-		DISCOUNT="${APP_ID_DISCOUNT##*_}"
+		APP_ID=$(echo $APP_ID_DISCOUNT | cut -d "_" -f 1)
+		DISCOUNT=$(echo $APP_ID_DISCOUNT | cut -d "_" -f 2)
 		if [[ "$DISCOUNT" -ge "$DISCOUNT_EXPECTED" ]]; then
 			APP_URL=$(getAppUrl "$APP_ID")
 			echo "$APP_URL"
