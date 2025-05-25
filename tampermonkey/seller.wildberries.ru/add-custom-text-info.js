@@ -23,7 +23,7 @@
 
     function getSupplyNumber() {
         const element = document.querySelector("[class='Supply-detail-options'] [class*='Text']");
-        const text = element.textContent.split("№")[1];
+        const text = "поставка " + element.textContent.split("№")[1];
         return text;
     }
 
@@ -34,7 +34,7 @@
         return text;
     }
 
-    function getDestination() {
+    function getSupplyDestination() {
         const element = document.querySelector("[class*='warehouse-name'] > *");
         const text = element.textContent;
         return text;
@@ -43,58 +43,73 @@
     function getSupplyType() {
         const elementInfoBlock = document.querySelectorAll("[class*='Supply-information'] [class*='Right-block'] > [class*='Info-block']");
         const element = elementInfoBlock[3].lastElementChild;
-        const text = element.textContent;
+        const text = element.textContent.toLowerCase();
         return text;
     }
 
-    function getQuantity() {
+    function getSupplyQuantity() {
         const element = document.querySelector("[class*='Options-table__display-info'] > *");
-        const text = element.textContent;
+        const text = element.textContent.split(" ")[0];
         return text;
     }
 
     function getBarcode() {
         const elementInfoBlock = document.querySelector("[class*='Packed-summary__content']");
         const element = elementInfoBlock.firstElementChild.firstElementChild;
-        const text = element.textContent;
+        const text = element.textContent + " арт";
         return text;
     }
 
     function getCount() {
         const elementInfoBlock = document.querySelector("[class*='Packed-summary__content']");
         const element = elementInfoBlock.lastElementChild.firstElementChild;
-        const text = element.textContent;
+        const text = element.textContent + " шт.";
         return text;
     }
 
     function createCustomText() {
-        const delimiter = " # ";
+        const elementContainer = document.createElement("container");
+        elementContainer.className = 'custom-text-info-block';
+        elementContainer.style.justifyContent = 'center';
+        elementContainer.style.alignItems = 'center';
+        elementContainer.style.textAlign = 'center';
+        elementContainer.style.display = 'inline-block';
+
+        const delimiter = " ";
         let text = "";
         text += getFirm() + delimiter;
         text += getSupplyNumber() + delimiter;
+        text += getSupplyDestination() + delimiter;
         text += getSupplyDate() + delimiter;
-        text += getDestination() + delimiter;
+        text += getSupplyQuantity() + delimiter;
         text += getSupplyType() + delimiter;
-        text += getQuantity() + delimiter;
         text += getBarcode() + delimiter;
         text += getCount();
 
-        const elementText = document.createElement("custom-text-info");
+        const elementText = document.createElement("text");
         elementText.className = 'custom-text-info';
         elementText.innerHTML = text;
         elementText.style.fontSize = '24px';
-        elementText.style.justifyContent = 'center';
-        elementText.style.alignItems = 'center';
-        elementText.style.textAlign = 'center';
-        elementText.style.display = 'inline-block';
-        return elementText;
+
+        const elementButton = document.createElement('button');
+        elementButton.className = 'copy-button';
+        elementButton.innerText = 'COPY';
+
+        elementButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navigator.clipboard.writeText(text);
+        });
+
+        elementContainer.appendChild(elementText);
+        elementContainer.appendChild(elementButton);
+        return elementContainer;
     }
 
     function addCustomText() {
         const elementButtonGenerate = document.querySelector("[class*='Options-table__generate'] >  [class*='button']");
 
         if (elementButtonGenerate !== null) {
-            const elementTextAdded = document.querySelector("[class='custom-text-info']");
+            const elementTextAdded = document.querySelector("[class='custom-text-info-block']");
 
             if (elementTextAdded == null) {
                 const elementCustomText = createCustomText();
