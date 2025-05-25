@@ -1,1 +1,1 @@
-Library of useful bash scripts
+Library of useful scripts
