@@ -1,8 +1,7 @@
 // ==UserScript==
-// @name         WB Partners
+// @name         Seller Wildberries - add custom text info
 // @namespace    http://tampermonkey.net/
 // @version      v1
-// @description  Various scripts
 // @author       Dmitrii Alekseev
 // @match        https://seller.wildberries.ru/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=seller.wildberries.ru
@@ -68,60 +67,43 @@
         return text;
     }
 
+    function createCustomText() {
+        const delimiter = " # ";
+        let text = "";
+        text += getFirm() + delimiter;
+        text += getSupplyNumber() + delimiter;
+        text += getSupplyDate() + delimiter;
+        text += getDestination() + delimiter;
+        text += getSupplyType() + delimiter;
+        text += getQuantity() + delimiter;
+        text += getBarcode() + delimiter;
+        text += getCount();
 
-
-
-    function addCopyButton() {
-        // Get all elements with SKU text
-        const elements = document.querySelectorAll("[label='SKU'] > * > [class='text-wrapper']");
-
-        // Process all elements one by one
-        elements.forEach((el) => {
-            // Get next element after SKU
-
-            var elementNext;
-
-            try {
-                elementNext = el.nextElementSibling;
-            } catch (error) {
-                // Next element does not exist
-            }
-
-            // If copy button not created
-            if (elementNext == null || elementNext.nodeName.toLowerCase() != buttonElementName) {
-                // Get SKU text and create copy button
-                const skuValue = el.textContent.trim();
-                const copyButton = createCopyButton(skuValue);
-                // And fix SKU style
-                el.style.display = 'inline-block';
-                el.insertAdjacentElement('afterend', copyButton);
-            }
-        });
+        const elementText = document.createElement("custom-text-info");
+        elementText.className = 'custom-text-info';
+        elementText.innerHTML = text;
+        elementText.style.fontSize = '24px';
+        elementText.style.justifyContent = 'center';
+        elementText.style.alignItems = 'center';
+        elementText.style.textAlign = 'center';
+        elementText.style.display = 'inline-block';
+        return elementText;
     }
 
-    function createCopyButton(textToCopy) {
-        const buttonContainer = document.createElement(buttonElementName);
-        buttonContainer.className = 'ng-star-inserted';
-        buttonContainer.style.fontSize = '16px';
-        buttonContainer.style.marginLeft = '6px';
-        buttonContainer.style.display = 'inline-block';
+    function addCustomText() {
+        const elementButtonGenerate = document.querySelector("[class*='Options-table__generate'] >  [class*='button']");
 
-        const button = document.createElement('button');
-        button.className = 'copy-button';
+        if (elementButtonGenerate !== null) {
+            const elementTextAdded = document.querySelector("[class='custom-text-info']");
 
-        const icon = document.createElement('i');
-        icon.className = 'mg-icon-copy';
-
-        button.addEventListener('click', (e) => {
-            e.stopPropagation();
-            navigator.clipboard.writeText(textToCopy);
-        });
-
-        button.appendChild(icon);
-        buttonContainer.appendChild(button);
-        return buttonContainer;
+            if (elementTextAdded == null) {
+                const elementCustomText = createCustomText();
+                elementButtonGenerate.style.display = 'inline-block';
+                elementButtonGenerate.insertAdjacentElement('afterend', elementCustomText);
+            }
+        }
     }
 
     // Execute every 1 second
-    setInterval(addCopyButton, 1000);
+    setInterval(addCustomText, 1000);
 })();
