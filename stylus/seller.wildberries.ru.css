@@ -4,3 +4,8 @@
 div [class*="Supply-detail"] > div [class*="Error-message"] {
     display: none;
 }
+
+/* Скрыть алерт об успешном создании поставки */
+div [class*="Successfull-full-alert"] {
+    display: none;
+}
