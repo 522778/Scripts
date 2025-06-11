@@ -1,0 +1,6 @@
+/* url starts with https://seller.wildberries.ru/ */
+
+/* Скрыть алерт "Обратите внимание, чтобы без проблем совершить отгрузку, Вам необходимо:" */
+div [class*="Supply-detail"] > div [class*="Error-message"] {
+    display: none;
+}
