@@ -1,0 +1,7 @@
+/* url starts with https://testit.infra.prql.dev/ */
+
+/* Сделать ширину окна фильтров по ширине контента */
+tms-work-items-quick-filters  {
+    width: unset !important;
+    min-width: 250px;
+}
