@@ -9,3 +9,20 @@ div [class*="Supply-detail"] > div [class*="Error-message"] {
 div [class*="Successfull-full-alert"] {
     display: none;
 }
+
+/* Увеличить высоту окна "Добавить товары на паллету" */
+div [class*="Add-goods-modal__content"] {
+    height: unset !important;
+    max-height: 60vh;
+}
+
+/* Скрыть название бренда у товаров в окне "Добавить товары на паллету" */
+div [class*="Add-goods-modal__content"] div [class*="Barcode-info__brand"] {
+    display: none;
+}
+
+/* Скрыть "Арт. WB" и "Бар." у товаров в окне "Добавить товары на паллету" */
+/* Т.е. скрыть все элементы кроме первого "Арт. продавца" */
+div [class*="Add-goods-modal__content"] div [class*="Barcode-info__description--second-block"] > div:not(:first-child) {
+    display: none;
+}
